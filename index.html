@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Permanent Molar Comparison</title>
+
+<script type="module"
+src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
+
+<style>
+
+/* ================= Body ================= */
+
+body{
+
+background:linear-gradient(180deg,#020617,#000000);
+
+font-family:'Segoe UI', Arial, sans-serif;
+
+color:white;
+
+text-align:center;
+
+margin:0;
+
+padding:20px;
+
+}
+
+/* Name Corner */
+
+.corner{
+
+position:fixed;
+
+top:15px;
+
+right:20px;
+
+text-align:right;
+
+font-size:14px;
+
+color:#9ca3af;
+
+}
+
+
+
+/* ================= Titles ================= */
+
+h1{
+
+margin-top:20px;
+
+font-size:36px;
+
+color:#f3f4f6;
+
+letter-spacing:0.5px;
+
+}
+
+.subtitle{
+
+color:#9ca3af;
+
+font-style:italic;
+
+margin-bottom:30px;
+
+font-size:18px;
+
+}
+
+
+
+/* ================= Container ================= */
+
+.container{
+
+display:flex;
+
+justify-content:center;
+
+gap:50px;
+
+flex-wrap: wrap;
+
+}
+
+.viewer{
+
+width:420px;
+
+margin-bottom:30px;
+
+}
+
+
+
+/* ================= Model Wrapper ================= */
+
+.model-wrapper {
+
+width:420px;
+
+height:420px;
+
+border-radius:15px;
+
+overflow:hidden;
+
+box-shadow:0 4px 25px rgba(0,0,0,0.6);
+
+/* SAME COLOR AS INFO BOX */
+
+background: rgba(31, 41, 55, 0.85);
+
+backdrop-filter: blur(8px);
+
+transition: transform 0.2s;
+
+}
+
+.model-wrapper:hover {
+
+transform: scale(1.02);
+
+}
+
+
+
+/* Flip maxillary */
+
+.upright model-viewer {
+
+transform: rotateX(180deg);
+
+}
+
+
+
+/* ================= Model Viewer ================= */
+
+model-viewer{
+
+width:100%;
+
+height:100%;
+
+border-radius:15px;
+
+exposure:1.3;
+
+shadow-intensity:1.3;
+
+environment-image:neutral;
+
+background:transparent;
+
+}
+
+
+
+/* ================= Select Dropdown ================= */
+
+select{
+
+width:340px;
+
+padding:12px;
+
+margin-bottom:15px;
+
+font-size:16px;
+
+border-radius:8px;
+
+border:none;
+
+background: #1f2937;
+
+color:white;
+
+transition: all 0.2s;
+
+}
+
+select:hover{
+
+background: #374151;
+
+}
+
+
+
+/* ================= Info Boxes ================= */
+
+.info{
+
+margin-top:15px;
+
+background: rgba(31, 41, 55, 0.85);
+
+backdrop-filter: blur(8px);
+
+padding:20px;
+
+border-radius:12px;
+
+min-height:200px;
+
+font-size:15px;
+
+line-height:1.6;
+
+text-align:left;
+
+box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+
+}
+
+
+
+/* ================= Collapsible Sections ================= */
+
+.collapsible{
+
+background-color:#111827;
+
+color:white;
+
+cursor:pointer;
+
+padding:10px;
+
+width:100%;
+
+border:none;
+
+text-align:left;
+
+outline:none;
+
+font-size:15px;
+
+border-radius:6px;
+
+margin-top:8px;
+
+transition: background 0.3s, transform 0.2s;
+
+}
+
+.collapsible:hover, .collapsible.active{
+
+background-color:#1f2937;
+
+transform: scale(1.02);
+
+}
+
+.content{
+
+max-height:0;
+
+overflow:hidden;
+
+padding:0 15px;
+
+margin-bottom:5px;
+
+background-color:#1f2937;
+
+border-radius:6px;
+
+transition: max-height 0.35s ease, padding 0.35s ease;
+
+}
+
+
+
+/* ================= Section Colors ================= */
+
+.chronology { color:#3b82f6; font-weight:600; }
+
+.cusps { color:#f59e0b; font-weight:600; }
+
+.features { color:#10b981; font-weight:600; }
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<div class="corner">
+
+Abdelrahman Khaled<br>
+
+265187
+
+</div>
+
+
+
+<h1>Permanent Molar Comparison</h1>
+
+<div class="subtitle">
+
+Interactive 3D Dental Comparison Tool
+
+</div>
+
+
+
+<div class="container">
+
+
+
+<!-- Viewer A -->
+
+<div class="viewer">
+
+<select onchange="loadTooth(this.value,'viewerA','infoA')">
+
+<option>Select Tooth A</option>
+
+<option value="maxillary_first_molar.glb">Maxillary First Molar</option>
+
+<option value="maxillary_second_molar.glb">Maxillary Second Molar</option>
+
+<option value="maxillary_third_molar.glb">Maxillary Third Molar</option>
+
+<option value="mandibular_first_molar.glb">Mandibular First Molar</option>
+
+<option value="mandibular_second_molar.glb">Mandibular Second Molar</option>
+
+<option value="mandibular_third_molar.glb">Mandibular Third Molar</option>
+
+<option value="maxillary_first_molar_with_cusp_of_carabelli.glb">
+
+Maxillary First Molar (Carabelli)
+
+</option>
+
+<option value="maxillary_first_molar_with_two_root_canals.glb">
+
+Maxillary First Molar (Two Root Canals)
+
+</option>
+
+</select>
+
+
+
+<div id="wrapperA" class="model-wrapper">
+
+<model-viewer
+
+id="viewerA"
+
+camera-controls
+
+auto-rotate
+
+shadow-intensity="1.3"
+
+exposure="1.3"
+
+environment-image="neutral">
+
+</model-viewer>
+
+</div>
+
+
+
+<div id="infoA" class="info">
+
+Select a molar
+
+</div>
+
+</div>
+
+
+
+<!-- Viewer B -->
+
+<div class="viewer">
+
+<select onchange="loadTooth(this.value,'viewerB','infoB')">
+
+<option>Select Tooth B</option>
+
+<option value="maxillary_first_molar.glb">Maxillary First Molar</option>
+
+<option value="maxillary_second_molar.glb">Maxillary Second Molar</option>
+
+<option value="maxillary_third_molar.glb">Maxillary Third Molar</option>
+
+<option value="mandibular_first_molar.glb">Mandibular First Molar</option>
+
+<option value="mandibular_second_molar.glb">Mandibular Second Molar</option>
+
+<option value="mandibular_third_molar.glb">Mandibular Third Molar</option>
+
+<option value="maxillary_first_molar_with_cusp_of_carabelli.glb">
+
+Maxillary First Molar (Carabelli)
+
+</option>
+
+<option value="maxillary_first_molar_with_two_root_canals.glb">
+
+Maxillary First Molar (Two Root Canals)
+
+</option>
+
+</select>
+
+
+
+<div id="wrapperB" class="model-wrapper">
+
+<model-viewer
+
+id="viewerB"
+
+camera-controls
+
+auto-rotate
+
+shadow-intensity="1.3"
+
+exposure="1.3"
+
+environment-image="neutral">
+
+</model-viewer>
+
+</div>
+
+
+
+<div id="infoB" class="info">
+
+Select a molar
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+const upsideDown=[
+
+"maxillary_first_molar.glb",
+
+"maxillary_second_molar.glb",
+
+"maxillary_third_molar.glb",
+
+"maxillary_first_molar_with_cusp_of_carabelli.glb",
+
+"maxillary_first_molar_with_two_root_canals.glb"
+
+];
+
+
+
+const toothInfo={
+
+"maxillary_first_molar.glb":{
+
+"Chronology":"Appearance: 4 m.I.U.<br>Calcification at birth<br>Enamel: 3-4 yrs<br>Eruption: 6-7 yrs<br>Root: 9-10 yrs",
+
+"Cusps & Roots":"Largest maxillary molar<br>4 major cusps<br>3 roots (2 buccal, 1 palatal)",
+
+"Special Features":"Tubercle of Carabelli may appear<br>Oblique ridge present"
+
+},
+
+"maxillary_second_molar.glb":{
+
+"Chronology":"Appearance: 1 yr<br>Calcification: 2.5-3 yrs<br>Enamel: 7-8 yrs<br>Eruption: 12-13 yrs<br>Root: 14-16 yrs",
+
+"Cusps & Roots":"Smaller than first molar<br>4 cusps<br>3 roots",
+
+"Special Features":"No fifth cusp<br>Sometimes heart-shaped occlusal surface"
+
+},
+
+"maxillary_third_molar.glb":{
+
+"Chronology":"Appearance: 4 yrs<br>Calcification: 7-9 yrs<br>Enamel: 12-16 yrs<br>Eruption: 17-21 yrs<br>Root: 18-25 yrs",
+
+"Cusps & Roots":"Variable anatomy<br>3 cusps common<br>Roots often fused",
+
+"Special Features":"Heart-shaped occlusal surface common<br>Highly variable anatomy"
+
+},
+
+"mandibular_first_molar.glb":{
+
+"Chronology":"Appearance: 4 m.I.U.<br>Calcification: birth<br>Enamel: 2.5-3 yrs<br>Eruption: 6-7 yrs<br>Root: 9-10 yrs",
+
+"Cusps & Roots":"Usually 5 cusps<br>2 roots (mesial, distal)",
+
+"Special Features":"Largest mandibular molar"
+
+},
+
+"mandibular_second_molar.glb":{
+
+"Chronology":"Appearance: 1 yr<br>Calcification: 2.5-3 yrs<br>Enamel: 7-8 yrs<br>Eruption: 11-13 yrs<br>Root: 14-15 yrs",
+
+"Cusps & Roots":"4 cusps<br>2 roots (mesial, distal)",
+
+"Special Features":"Cross-shaped grooves"
+
+},
+
+"mandibular_third_molar.glb":{
+
+"Chronology":"Appearance: 4 yrs<br>Calcification: 8-10 yrs<br>Enamel: 12-16 yrs<br>Eruption: 17-21 yrs<br>Root: 18-25 yrs",
+
+"Cusps & Roots":"Variable anatomy",
+
+"Special Features":"Irregular grooves and wrinkled occlusal surface"
+
+},
+
+"maxillary_first_molar_with_cusp_of_carabelli.glb":{
+
+"Chronology":"Appearance: 4 m.I.U.<br>Calcification at birth<br>Enamel: 3-4 yrs<br>Eruption: 6-7 yrs<br>Root: 9-10 yrs",
+
+"Cusps & Roots":"5 cusps (including Carabelli)<br>3 roots",
+
+"Special Features":"Distinct tubercle of Carabelli"
+
+},
+
+"maxillary_first_molar_with_two_root_canals.glb":{
+
+"Chronology":"Appearance: 4 m.I.U.<br>Calcification at birth<br>Enamel: 3-4 yrs<br>Eruption: 6-7 yrs<br>Root: 9-10 yrs",
+
+"Cusps & Roots":"4 cusps<br>3 roots, 2 canals in mesiobuccal root",
+
+"Special Features":"Two root canals variation"
+
+}
+
+};
+
+
+
+function loadTooth(file,viewerId,infoId){
+
+const wrapper=document.getElementById('wrapper'+viewerId.slice(-1));
+
+const mv=document.getElementById(viewerId);
+
+mv.src=file;
+
+
+if(upsideDown.includes(file))
+
+wrapper.classList.add("upright");
+
+else
+
+wrapper.classList.remove("upright");
+
+
+const info=toothInfo[file];
+
+const container=document.getElementById(infoId);
+
+
+let html="";
+
+for(const section in info){
+
+let cls="";
+
+if(section==="Chronology") cls="chronology";
+
+if(section==="Cusps & Roots") cls="cusps";
+
+if(section==="Special Features") cls="features";
+
+
+html+=`<button class="collapsible ${cls}">${section}</button>
+<div class="content ${cls}">${info[section]}</div>`;
+
+}
+
+
+container.innerHTML=html;
+
+
+const coll=container.querySelectorAll(".collapsible");
+
+coll.forEach(btn=>{
+
+btn.onclick=function(){
+
+coll.forEach(b=>{
+
+if(b!==this)
+
+b.nextElementSibling.style.maxHeight=null;
+
+});
+
+
+const content=this.nextElementSibling;
+
+
+if(content.style.maxHeight)
+
+content.style.maxHeight=null;
+
+else
+
+content.style.maxHeight=content.scrollHeight+"px";
+
+}
+
+});
+
+
+}
+
+</script>
+
+</body>
+</html>
